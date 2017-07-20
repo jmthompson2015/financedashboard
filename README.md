@@ -17,6 +17,3 @@
 ## License
 
 Finance Dashboard is released under the terms of the [MIT License](https://github.com/jmthompson2015/financedashboard/blob/master/LICENSE.txt).
-
-[//]: # see [README.md template](https://gist.github.com/jxson/1784669)
-[//]: # see [README-Template.md](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
