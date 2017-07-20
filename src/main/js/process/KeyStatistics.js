@@ -2,9 +2,8 @@ define(["process/Action"], function(Action)
 {
    "use strict";
 
-   function KeyStatistics(store, symbol, callback)
+   function KeyStatistics(symbol, callback)
    {
-      InputValidator.validateNotEmpty("store", store);
       InputValidator.validateNotEmpty("symbol", symbol);
       InputValidator.validateNotNull("callback", callback);
 
@@ -64,7 +63,6 @@ define(["process/Action"], function(Action)
             forwardPE: (forwardPE ? forwardPE.number : undefined),
             forwardAnnualDividendYield: (dividendYield ? dividendYield.number : undefined),
          };
-         store.dispatch(Action.setKeyStatistics(symbol, data));
          callback(symbol, data);
 
          LOGGER.trace("receiveData() end");

@@ -94,19 +94,21 @@
 				{
 					var state = store.getState();
 					var symbols = state.symbols;
-					var callback1 = function(symbol, data)
+					var keyStatisticsCallback = function(symbol, data)
 					{
 						console.log("key statistics " + symbol + " " + JSON.stringify(data));
+						store.dispatch(Action.setKeyStatistics(symbol, data));
 					};
-					var callback2 = function(symbol, data)
+					var performanceCallback = function(symbol, data)
 					{
 						console.log("performance " + symbol + " " + JSON.stringify(data));
+						store.dispatch(Action.setPerformance(symbol, data));
 					};
 
 					symbols.forEach(function(symbol)
 					{
-						var keyStats = new KeyStatistics(store, symbol, callback1);
-						var performance = new Performance(store, symbol, callback2);
+						var keyStats = new KeyStatistics(symbol, keyStatisticsCallback);
+						var performance = new Performance(symbol, performanceCallback);
 
 						keyStats.fetchData();
 						performance.fetchData();

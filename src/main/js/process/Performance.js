@@ -2,9 +2,8 @@ define(["process/Action"], function(Action)
 {
    "use strict";
 
-   function Performance(store, symbol, callback)
+   function Performance(symbol, callback)
    {
-      InputValidator.validateNotNull("store", store);
       InputValidator.validateNotEmpty("symbol", symbol);
       InputValidator.validateNotNull("callback", callback);
 
@@ -110,7 +109,6 @@ define(["process/Action"], function(Action)
             fiveYearTotalReturn: fiveYearTotalReturn,
             tenYearTotalReturn: tenYearTotalReturn,
          };
-         store.dispatch(Action.setPerformance(symbol, data));
          callback(symbol, data);
 
          LOGGER.trace("receiveData() end");
