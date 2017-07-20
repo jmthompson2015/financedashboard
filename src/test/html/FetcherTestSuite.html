@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TestSuite</title>
+
+  <link rel="stylesheet" href="../../../lib/qunit/qunit-2.3.2.css">
+  <script src="../../../lib/qunit/qunit-2.3.2.js"></script>
+  <script>
+    QUnit.config.autostart = false;
+  </script>
+
+  <script src="../../../lib/jquery/jquery-3.2.1.js"></script>
+  <script src="../../../lib/redux/redux-3.6.0.js"></script>
+  <script src="../../../lib/require/require-2.3.3.js" data-main="../../main/js/InitialState"></script>
+
+  <script src="../../main/js/core-util/Logger.js"></script>
+  <script src="../../main/js/core-util/InputValidator.js"></script>
+
+  <script>
+    "use strict";
+    var LOGGER = new Logger();
+    LOGGER.setTraceEnabled(false);
+    LOGGER.setDebugEnabled(false);
+
+    var prefix = "../../test/js/";
+    var suffix = "Test";
+    var testModules = ["process/KeyStatistics0", "process/Performance0"];
+    testModules = testModules.map(function(testModule)
+    {
+      return prefix + testModule + suffix;
+    });
+
+    require(testModules, function()
+    {
+      QUnit.start();
+    });
+  </script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+</body>
+
+</html>
