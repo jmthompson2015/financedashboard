@@ -79,7 +79,7 @@
 				var propertyNames = ["oneYearTotalReturn", "threeYearTotalReturn", "fiveYearTotalReturn",
 					"tenYearTotalReturn"
 				];
-				renderMultiChart(backgroundColors, "chart3", propertyNames, "chart4Container");
+				renderMultiChart(backgroundColors, "chart4", propertyNames, "chart4Container", 20);
 
 				var connector4 = ReactRedux.connect(Connector.DataTable.mapStateToProps)(DataTable);
 				var element4 = React.createElement(ReactRedux.Provider,
@@ -166,8 +166,9 @@
 					ReactDOM.render(element, document.getElementById(containerId));
 				}
 
-				function renderMultiChart(backgroundColors, chartCanvasId, propertyNames, containerId)
+				function renderMultiChart(backgroundColors, chartCanvasId, propertyNames, containerId, stepSize)
 				{
+					var myStepSize = (stepSize ? stepSize : 10);
 					var element = React.createElement(ReactRedux.Provider,
 					{
 						store: store,
@@ -178,6 +179,7 @@
 						entityName: "performance",
 						labels: ["1-Year", "3-Year", "5-Year", "10-Year"],
 						propertyNames: propertyNames,
+						stepSize: myStepSize,
 						useLegend: true,
 					}));
 					ReactDOM.render(element, document.getElementById(containerId));
