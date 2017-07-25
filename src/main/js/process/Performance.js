@@ -1,4 +1,4 @@
-define(["process/Action"], function(Action)
+define(function()
 {
    "use strict";
 
