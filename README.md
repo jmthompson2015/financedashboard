@@ -2,7 +2,7 @@
 
 ## Applications
 
-* [Finance Dashboard](https://rawgit.com/jmthompson2015/financedashboard/master/src/main/html/dashboard.html)
+* [Finance Dashboard](https://rawgit.com/jmthompson2015/financedashboard/master/index.html)
 
 ## Built With
 
@@ -12,7 +12,6 @@
 * [React](http://facebook.github.io/react/) - A JavaScript library for building user interfaces.
 * [Reactable](http://glittershark.github.io/reactable/) - Fast, flexible, and simple data tables in React.
 * [Redux](https://redux.js.org/) - A predictable state container for JavaScript apps.
-* [Require.js](http://requirejs.org/) - A JavaScript file and module loader.
 
 ## License
 
