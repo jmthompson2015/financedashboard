@@ -1,13 +1,11 @@
+"use strict";
+
 define(function()
 {
-   "use strict";
-
    function Performance(symbol, callback)
    {
       InputValidator.validateNotEmpty("symbol", symbol);
       InputValidator.validateNotNull("callback", callback);
-
-      var that = this;
 
       this.fetchData = function()
       {
@@ -104,6 +102,7 @@ define(function()
          LOGGER.debug("tenYearTotalReturn   = " + tenYearTotalReturn);
 
          var data = {
+            symbol: symbol,
             oneYearTotalReturn: oneYearTotalReturn,
             threeYearTotalReturn: threeYearTotalReturn,
             fiveYearTotalReturn: fiveYearTotalReturn,

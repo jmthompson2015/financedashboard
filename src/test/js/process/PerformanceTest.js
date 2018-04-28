@@ -1,90 +1,31 @@
+"use strict";
+
 define(["process/Performance"], function(Performance)
 {
-   "use strict";
-   QUnit.module("Performance");
+   QUnit.module("Performance0");
 
-   QUnit.test("oneYearTotalReturn", function(assert)
+   QUnit.test("fetchData()", function(assert)
    {
       // Setup.
       var symbol = "AAPL";
       var callback = function(symbol, data)
       {
          // Verify.
+         assert.ok(true, "test resumed from async operation");
+         assert.ok(symbol);
+         assert.equal(symbol, "AAPL");
          assert.ok(data);
-         assert.equal(data.oneYearTotalReturn, 52.68);
+         assert.equal(data.symbol, "AAPL");
+         assert.equal(5 < data.oneYearTotalReturn && data.oneYearTotalReturn < 30, true, "oneYearTotalReturn = " + data.oneYearTotalReturn);
+         assert.equal(5 < data.threeYearTotalReturn && data.threeYearTotalReturn < 30, true, "threeYearTotalReturn = " + data.threeYearTotalReturn);
+         assert.equal(5 < data.fiveYearTotalReturn && data.fiveYearTotalReturn < 30, true, "fiveYearTotalReturn = " + data.fiveYearTotalReturn);
+         assert.equal(5 < data.tenYearTotalReturn && data.tenYearTotalReturn < 30, true, "tenYearTotalReturn = " + data.tenYearTotalReturn);
+         done();
       };
       var perf = new Performance(symbol, callback);
-      var htmlDocument = load();
-      assert.ok(htmlDocument);
 
       // Run.
-      perf.receiveData(htmlDocument);
-      //  var result = store.getState().performance[symbol].oneYearTotalReturn;
-
-      // Verify.
-      //  assert.ok(result);
-      //  assert.equal(result, 52.68);
+      var done = assert.async();
+      perf.fetchData();
    });
-
-   QUnit.test("threeYearTotalReturn", function(assert)
-   {
-      // Setup.
-      var symbol = "AAPL";
-      var callback = function(symbol, data)
-      {
-         // Verify.
-         assert.ok(data);
-         assert.equal(data.threeYearTotalReturn, 18.34);
-      };
-      var perf = new Performance(symbol, callback);
-      var htmlDocument = load();
-
-      // Run.
-      perf.receiveData(htmlDocument);
-   });
-
-   QUnit.test("fiveYearTotalReturn", function(assert)
-   {
-      // Setup.
-      var symbol = "AAPL";
-      var callback = function(symbol, data)
-      {
-         // Verify.
-         assert.ok(data);
-         assert.equal(data.fiveYearTotalReturn, 13.04);
-      };
-      var perf = new Performance(symbol, callback);
-      var htmlDocument = load();
-
-      // Run.
-      perf.receiveData(htmlDocument);
-   });
-
-   QUnit.test("tenYearTotalReturn", function(assert)
-   {
-      // Setup.
-      var symbol = "AAPL";
-      var callback = function(symbol, data)
-      {
-         // Verify.
-         assert.ok(data);
-         assert.equal(data.tenYearTotalReturn, 23.27);
-      };
-      var perf = new Performance(symbol, callback);
-      var htmlDocument = load();
-
-      // Run.
-      perf.receiveData(htmlDocument);
-   });
-
-   function load()
-   {
-      var request = new XMLHttpRequest();
-      var url = "../resources/Performance_AAPL.xml";
-      var isAsync = false;
-      request.open("GET", url, isAsync);
-      request.send();
-
-      return request.responseText;
-   }
 });
