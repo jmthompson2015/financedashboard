@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>Finance Dashboard</title>
+
+	<link rel="stylesheet" href="src/style.css">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.2/Chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/react@15.6.1/dist/react.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/react-dom@15.6.1/dist/react-dom.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/react-redux@5.0.5/dist/react-redux.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reactable@0.14.1/build/reactable.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/redux@3.6.0/dist/redux.min.js"></script>
+	<script src="src/index.js" type="module"></script>
+</head>
+<body>
+	<h1>Finance Dashboard</h1>
+	<section>
+		<div id="symbolsUI"></div>
+	</section>
+	<section class="chartContainer">
+		<span class="chartTitle">Price % of 52 Week Range</span>
+		<div id="chart0Container"></div>
+	</section>
+	<section class="chartContainer">
+		<span class="chartTitle">Free Cash Flow ($B)</span>
+		<div id="chart1Container"></div>
+	</section>
+	<section class="chartContainer">
+		<span class="chartTitle">Forward P/E</span>
+		<div id="chart2Container"></div>
+	</section>
+	<section class="chartContainer">
+		<span class="chartTitle">Forward Annual Dividend Yield (%)</span>
+		<div id="chart3Container"></div>
+	</section>
+	<section class="chartContainer">
+		<span class="chartTitle">Trailing Total Returns (%)</span>
+		<div id="chart4Container"></div>
+	</section>
+	<section class="tableContainer">
+		<div id="table0"></div>
+	</section>
+</body>
+
+</html>
