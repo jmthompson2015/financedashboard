@@ -1,0 +1,31 @@
+{
+  "name": "financedashboard",
+  "version": "1.0.0",
+  "description": "## Applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmthompson2015/financedashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jmthompson2015/financedashboard/issues"
+  },
+  "homepage": "https://github.com/jmthompson2015/financedashboard#readme",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "reactable": "^0.14.1",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "qunit": "^2.6.0"
+  }
+}
