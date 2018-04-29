@@ -2,7 +2,7 @@
 
 ## Applications
 
-* [Finance Dashboard](https://cdn.jsdelivr.net/gh/jmthompson2015/financedashboard/index.html)
+* [Finance Dashboard](https://cdn.jsdelivr.net/gh/jmthompson2015/financedashboard/master/index.html)
 
 ## Built With
 
