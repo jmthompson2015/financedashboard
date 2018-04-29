@@ -5,7 +5,7 @@ const SymbolsUI = React.createClass(
       LOGGER.debug("SymbolsUI.getInitialState()");
 
       var initialSymbolString = (this.props.initialSymbolString ? this.props.initialSymbolString :
-         "AAPL,AMZN,INTC,KO,T,TRV,VSMGX");
+         "AAPL,AMZN,INTC,KO,T,VEIRX,VSMGX,VSGAX");
 
       return (
       {
@@ -47,7 +47,7 @@ const SymbolsUI = React.createClass(
       {
          className: "example",
          colSpan: 3,
-      }, "Example: AAPL,AMZN,INTC,KO,T,TRV,VSMGX")));
+      }, "Example: AAPL,AMZN,INTC,KO,T,VEIRX,VSMGX,VSGAX")));
 
       return React.DOM.table(
       {}, rows);
