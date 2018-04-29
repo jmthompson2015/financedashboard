@@ -9,7 +9,7 @@ function KeyStatistics(symbol, callback)
    {
       LOGGER.trace("fetchData() start");
 
-      var url = "https://finance.yahoo.com/quote/" + symbol + "/key-statistics?p=" + symbol;
+      const url = createUrl();
       $.get(url, this.receiveData);
 
       LOGGER.trace("fetchData() end");
@@ -24,6 +24,20 @@ function KeyStatistics(symbol, callback)
 
       LOGGER.trace("receiveData() end");
    };
+
+   function createUrl()
+   {
+      const baseUrl = "https://query.yahooapis.com/v1/public/yql?q=";
+
+      // https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL
+      const sourceUrl = "https://finance.yahoo.com/quote/" + symbol + "/key-statistics?p=" + symbol;
+
+      const query = "select * from htmlstring where url=\"" + sourceUrl + "\"";
+      const answer = baseUrl + encodeURIComponent(query) + "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+      LOGGER.debug("url = " + answer);
+
+      return answer;
+   }
 
    function get52WeekPricePercent(price, _52WeekLow, _52WeekHigh)
    {
@@ -51,7 +65,8 @@ function KeyStatistics(symbol, callback)
    function parseRowData(xmlDocument)
    {
       let _52WeekHigh, _52WeekLow, dividendYield, fiftyTwoWeekPricePercent, forwardPE, freeCashFlow, price;
-      let myDocument = xmlDocument;
+      const xml_serializer = new XMLSerializer();
+      let myDocument = xml_serializer.serializeToString(xmlDocument);
 
       const key1 = "root.App.main = ";
       const index1 = myDocument.indexOf(key1);
@@ -76,7 +91,7 @@ function KeyStatistics(symbol, callback)
                rawData = financialData[key];
             }
 
-            var newData;
+            let newData;
 
             if (rawData !== undefined)
             {
