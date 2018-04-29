@@ -18,13 +18,14 @@
   },
   "homepage": "https://github.com/jmthompson2015/financedashboard#readme",
   "dependencies": {
-    "chart.js": "^2.0.2",
+    "chart.js": "^2.7.2",
     "jquery": "^3.3.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-redux": "^5.0.5",
-    "reactable": "^0.14.1",
-    "redux": "^3.6.0"
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-dom-factories": "^1.0.2",
+    "react-redux": "^5.0.7",
+    "reactable": "vladnicula/reactable",
+    "redux": "^4.0.0"
   },
   "devDependencies": {
     "qunit": "^2.6.0"

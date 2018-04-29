@@ -1,23 +1,21 @@
-const SymbolsUI = React.createClass(
+class SymbolsUI extends React.Component
 {
-   getInitialState: function()
+   constructor(props)
    {
-      LOGGER.debug("SymbolsUI.getInitialState()");
+      super(props);
 
-      var initialSymbolString = (this.props.initialSymbolString ? this.props.initialSymbolString :
-         "AAPL,AMZN,INTC,KO,T,VEIRX,VSMGX,VSGAX");
+      const initialSymbolString = (this.props.initialSymbolString ? this.props.initialSymbolString : "AAPL,AMZN,INTC,KO,T,VEIRX,VSMGX,VSGAX");
 
-      return (
-      {
-         symbolString: initialSymbolString,
-      });
-   },
+      this.state = {
+         symbolString: initialSymbolString
+      };
+   }
 
-   render: function()
+   render()
    {
       LOGGER.debug("SymbolsUI.render()");
 
-      var symbolsInput = React.DOM.input(
+      const symbolsInput = ReactDOMFactories.input(
       {
          id: "symbolsUI",
          type: "text",
@@ -25,35 +23,46 @@ const SymbolsUI = React.createClass(
          onChange: this.handleChange,
       });
 
-      var submitButton = React.DOM.button(
+      const submitButton = ReactDOMFactories.button(
       {
          onClick: this.handleSubmit,
       }, "Submit");
 
-      var rows = [];
-      var cells = [];
+      const rows = [];
+      const cells = [];
 
-      cells.push(React.DOM.td(
-      {}, "Symbols: "));
-      cells.push(React.DOM.td(
-      {}, symbolsInput));
-      cells.push(React.DOM.td(
-      {}, submitButton));
-      rows.push(React.DOM.tr(
-      {}, cells));
+      cells.push(ReactDOMFactories.td(
+      {
+         key: "cell" + cells.length
+      }, "Symbols: "));
+      cells.push(ReactDOMFactories.td(
+      {
+         key: "cell" + cells.length
+      }, symbolsInput));
+      cells.push(ReactDOMFactories.td(
+      {
+         key: "cell" + cells.length
+      }, submitButton));
+      rows.push(ReactDOMFactories.tr(
+      {
+         key: "row" + rows.length
+      }, cells));
 
-      rows.push(React.DOM.tr(
-      {}, React.DOM.td(
+      rows.push(ReactDOMFactories.tr(
+      {
+         key: "row" + rows.length
+      }, ReactDOMFactories.td(
       {
          className: "example",
          colSpan: 3,
       }, "Example: AAPL,AMZN,INTC,KO,T,VEIRX,VSMGX,VSGAX")));
 
-      return React.DOM.table(
-      {}, rows);
-   },
+      return ReactDOMFactories.table(
+      {}, ReactDOMFactories.tbody(
+      {}, rows));
+   }
 
-   handleChange: function(event)
+   handleChange(event)
    {
       LOGGER.debug("SymbolsUI.handleChange()");
 
@@ -61,14 +70,14 @@ const SymbolsUI = React.createClass(
       {
          symbolString: event.target.value,
       });
-   },
+   }
 
-   handleSubmit: function(event)
+   handleSubmit()
    {
       LOGGER.debug("SymbolsUI.handleSubmit()");
 
       this.props.callback(this.state.symbolString);
-   },
-});
+   }
+}
 
 export default SymbolsUI;

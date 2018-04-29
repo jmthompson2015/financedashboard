@@ -144,7 +144,7 @@ function KeyStatistics(symbol, callback)
          fiftyTwoWeekPricePercent: fiftyTwoWeekPricePercent,
          freeCashFlow: (freeCashFlow ? freeCashFlow.number : undefined),
          forwardPE: (forwardPE ? forwardPE.number : undefined),
-         forwardAnnualDividendYield: (dividendYield ? dividendYield.number : undefined),
+         forwardAnnualDividendYield: (dividendYield && dividendYield.number ? dividendYield.number : undefined),
       });
    }
 }

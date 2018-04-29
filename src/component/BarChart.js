@@ -1,61 +1,63 @@
 import InputValidator from "../util/InputValidator.js";
 
-const BarChart = React.createClass(
+class BarChart extends React.Component
 {
-   componentDidMount: function()
+   constructor(props)
+   {
+      super(props);
+
+      this.state = {};
+   }
+
+   componentDidMount()
    {
       this.initializeChart(this.props);
-   },
+   }
 
-   componentWillUnmount: function()
+   componentWillUnmount()
    {
-      var chart = this.state.chart;
+      const chart = this.state.chart;
       chart.destroy();
-   },
+   }
 
-   componentWillReceiveProps: function(nextProps)
+   componentWillReceiveProps(nextProps)
    {
-      var chart = this.state.chart;
+      const chart = this.state.chart;
       chart.destroy();
       this.initializeChart(nextProps);
-   },
+   }
 
-   getInitialState: function()
-   {
-      return {};
-   },
-
-   render: function()
+   render()
    {
       InputValidator.validateNotNull("chartCanvasId", this.props.chartCanvasId);
       InputValidator.validateNotNull("data", this.props.data);
       InputValidator.validateNotNull("options", this.props.options);
 
-      var chartCanvasId = this.props.chartCanvasId;
+      const chartCanvasId = this.props.chartCanvasId;
 
-      return React.DOM.canvas(
+      return ReactDOMFactories.canvas(
       {
          id: chartCanvasId,
          className: "chart",
          width: 300,
          height: 200,
       });
-   },
+   }
 
-   initializeChart: function(nextProps)
+   initializeChart(nextProps)
    {
-      var element = ReactDOM.findDOMNode(this);
-      var ctx = element.getContext("2d");
-      var chart = new Chart(ctx,
+      const element = ReactDOM.findDOMNode(this);
+      const ctx = element.getContext("2d");
+      const chart = new Chart(ctx,
       {
          type: "bar",
          data: nextProps.data,
          options: nextProps.options,
       });
       this.state.chart = chart;
-   },
+   }
 
-   updatePoints: function(nextProps, chart)
+   updatePoints(nextProps, chart)
    {
       nextProps.data.datasets.forEach(function(dataset, setIndex)
       {
@@ -64,7 +66,7 @@ const BarChart = React.createClass(
             chart.data.datasets[setIndex].data[pointIndex] = point;
          }, this);
       }, this);
-   },
-});
+   }
+}
 
 export default BarChart;

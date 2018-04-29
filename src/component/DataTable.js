@@ -1,57 +1,19 @@
 import InputValidator from "../util/InputValidator.js";
 
-const DataTable = React.createClass(
+class DataTable extends React.Component
 {
-   columns: [
-      {
-         key: "symbol",
-         label: "Symbol"
-      },
-      {
-         key: "fiftyTwoWeekPricePercent",
-         label: "Price % of 52 Week Range"
-      },
-      {
-         key: "freeCashFlow",
-         label: "Free Cash Flow ($B)"
-      },
-      {
-         key: "forwardPE",
-         label: "Forward P/E"
-      },
-      {
-         key: "forwardAnnualDividendYield",
-         label: "Forward Annual Dividend Yield (%)"
-      },
-      {
-         key: "oneYearTotalReturn",
-         label: "1-Year Total Return (%)"
-      },
-      {
-         key: "threeYearTotalReturn",
-         label: "3-Year Total Return (%)"
-      },
-      {
-         key: "fiveYearTotalReturn",
-         label: "5-Year Total Return (%)"
-      },
-      {
-         key: "tenYearTotalReturn",
-         label: "10-Year Total Return (%)"
-      }],
-
-   createEmptyCell: function(key, column)
+   createEmptyCell(key, column)
    {
       return React.createElement(Reactable.Td,
       {
          key: key,
          column: column
       }, "");
-   },
+   }
 
-   createNumberCell: function(key, column, value, digits)
+   createNumberCell(key, column, value, digits)
    {
-      var myValue = "";
+      let myValue = "";
 
       if (value)
       {
@@ -65,30 +27,30 @@ const DataTable = React.createClass(
          className: "numberCell",
          value: value,
       }, myValue);
-   },
+   }
 
-   createRow: function(symbol, key)
+   createRow(symbol, key)
    {
-      var cells = [];
+      const cells = [];
 
       cells.push(React.createElement(Reactable.Td,
       {
          key: cells.length,
          column: "symbol",
          value: symbol,
-      }, React.DOM.a(
+      }, ReactDOMFactories.a(
       {
          href: "http://finance.yahoo.com/q?s=" + symbol,
          target: "_blank",
       }, symbol)));
 
-      var myData0 = this.props.keyStatistics[symbol];
-      var myData1 = this.props.performance[symbol];
-      var digits;
+      const myData0 = this.props.keyStatistics[symbol];
+      const myData1 = this.props.performance[symbol];
+      let digits;
 
-      for (var j = 1; j < this.columns.length; j++)
+      for (let j = 1; j < DataTable.columns.length; j++)
       {
-         var column = this.columns[j];
+         const column = DataTable.columns[j];
 
          if (j < 5 && myData0)
          {
@@ -110,16 +72,16 @@ const DataTable = React.createClass(
       {
          key: key,
       }, cells);
-   },
+   }
 
-   render: function()
+   render()
    {
       InputValidator.validateNotNull("symbols", this.props.symbols);
       InputValidator.validateNotNull("keyStatistics", this.props.keyStatistics);
       InputValidator.validateNotNull("performance", this.props.performance);
 
-      var symbols = this.props.symbols;
-      var rows = [];
+      const symbols = this.props.symbols;
+      const rows = [];
 
       symbols.forEach(function(symbol, i)
       {
@@ -129,10 +91,49 @@ const DataTable = React.createClass(
       return React.createElement(Reactable.Table,
       {
          className: "dataTable",
-         columns: this.columns,
+         columns: DataTable.columns,
          sortable: true
       }, rows);
+   }
+}
+
+DataTable.columns = [
+   {
+      key: "symbol",
+      label: "Symbol"
    },
-});
+   {
+      key: "fiftyTwoWeekPricePercent",
+      label: "Price % of 52 Week Range"
+   },
+   {
+      key: "freeCashFlow",
+      label: "Free Cash Flow ($B)"
+   },
+   {
+      key: "forwardPE",
+      label: "Forward P/E"
+   },
+   {
+      key: "forwardAnnualDividendYield",
+      label: "Forward Annual Dividend Yield (%)"
+   },
+   {
+      key: "oneYearTotalReturn",
+      label: "1-Year Total Return (%)"
+   },
+   {
+      key: "threeYearTotalReturn",
+      label: "3-Year Total Return (%)"
+   },
+   {
+      key: "fiveYearTotalReturn",
+      label: "5-Year Total Return (%)"
+   },
+   {
+      key: "tenYearTotalReturn",
+      label: "10-Year Total Return (%)"
+   }
+];
 
 export default DataTable;

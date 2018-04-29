@@ -17,6 +17,7 @@
       "React": false,
       "Reactable": false,
       "ReactDOM": false,
+      "ReactDOMFactories": false,
       "ReactRedux": false,
       "Redux": false,
       "window": false,
