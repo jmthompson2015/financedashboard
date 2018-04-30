@@ -119,11 +119,14 @@ function KeyStatistics(symbol, callback)
             }
          });
 
-         dividendYield = {
-            label: "dividendYield",
-            value: summaryDetail.dividendYield.fmt,
-            number: summaryDetail.dividendYield.raw * 100.0,
-         };
+         if (summaryDetail !== undefined && summaryDetail.dividendYield !== undefined)
+         {
+            dividendYield = {
+               label: "dividendYield",
+               value: summaryDetail.dividendYield.fmt,
+               number: summaryDetail.dividendYield.raw * 100.0,
+            };
+         }
 
          if (financialData !== undefined && financialData.freeCashflow !== undefined)
          {

@@ -20,12 +20,12 @@ class SymbolsUI extends React.Component
          id: "symbolsUI",
          type: "text",
          value: this.state.symbolString,
-         onChange: this.handleChange,
+         onChange: this.handleChange.bind(this),
       });
 
       const submitButton = ReactDOMFactories.button(
       {
-         onClick: this.handleSubmit,
+         onClick: this.handleSubmit.bind(this),
       }, "Submit");
 
       const rows = [];
@@ -61,23 +61,23 @@ class SymbolsUI extends React.Component
       {}, ReactDOMFactories.tbody(
       {}, rows));
    }
-
-   handleChange(event)
-   {
-      LOGGER.debug("SymbolsUI.handleChange()");
-
-      this.setState(
-      {
-         symbolString: event.target.value,
-      });
-   }
-
-   handleSubmit()
-   {
-      LOGGER.debug("SymbolsUI.handleSubmit()");
-
-      this.props.callback(this.state.symbolString);
-   }
 }
+
+SymbolsUI.prototype.handleChange = function(event)
+{
+   LOGGER.debug("SymbolsUI.handleChange()");
+
+   this.setState(
+   {
+      symbolString: event.target.value,
+   });
+};
+
+SymbolsUI.prototype.handleSubmit = function()
+{
+   LOGGER.debug("SymbolsUI.handleSubmit()");
+
+   this.props.callback(this.state.symbolString);
+};
 
 export default SymbolsUI;
