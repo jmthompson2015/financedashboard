@@ -1,155 +1,138 @@
-import InputValidator from "../util/InputValidator.js";
+import FetchUtilities from "./FetchUtilities.js";
 
-function KeyStatistics(symbol, callback)
-{
-   InputValidator.validateNotEmpty("symbol", symbol);
-   InputValidator.validateNotNull("callback", callback);
+const KeyStatistics = {};
 
-   this.fetchData = function()
-   {
-      LOGGER.trace("fetchData() start");
+const createUrl = symbol => `https://finance.yahoo.com/quote/${symbol}/key-statistics?p=${symbol}`;
 
-      const url = createUrl();
-      $.get(url, this.receiveData);
+const get52WeekPricePercent = (price, _52WeekLow, _52WeekHigh) => {
+  const myPrice = price ? price.number : undefined;
+  const low = _52WeekLow ? _52WeekLow.number : undefined;
+  const high = _52WeekHigh ? _52WeekHigh.number : undefined;
+  let answer;
 
-      LOGGER.trace("fetchData() end");
-   };
+  if (myPrice !== undefined && low !== undefined && high !== undefined) {
+    const range = high - low;
+    answer = Math.round((100.0 * (myPrice - low)) / range);
+  }
 
-   this.receiveData = function(xmlDocument)
-   {
-      LOGGER.trace("receiveData() start");
+  return answer;
+};
 
-      const data = parseRowData(xmlDocument);
-      callback(symbol, data);
+const parseRawFmt = (htmlDocument, name, label) => {
+  let fmt;
+  let raw;
 
-      LOGGER.trace("receiveData() end");
-   };
+  const index0 = htmlDocument.indexOf(name);
 
-   function createUrl()
-   {
-      const baseUrl = "https://query.yahooapis.com/v1/public/yql?q=";
+  if (index0 >= 0) {
+    const index5 = htmlDocument.indexOf("},", index0);
 
-      // https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL
-      const sourceUrl = "https://finance.yahoo.com/quote/" + symbol + "/key-statistics?p=" + symbol;
+    if (index5 > index0) {
+      const key1 = '"raw":';
+      const index1 = htmlDocument.indexOf(key1, index0);
 
-      const query = "select * from htmlstring where url=\"" + sourceUrl + "\"";
-      const answer = baseUrl + encodeURIComponent(query) + "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-      LOGGER.debug("url = " + answer);
+      if (index0 < index1 && index1 < index5) {
+        const index2 = htmlDocument.indexOf(",", index1);
+        const rawString0 = htmlDocument.substring(index1 + key1.length, index2);
+        const rawString = rawString0.replace(/,/g, "");
+        // console.log(`${name} raw string = :${rawString}:`);
+        raw = parseFloat(rawString, 10);
+        // console.log(`${name} raw = ${raw}`);
 
-      return answer;
-   }
+        const key3 = '"fmt":';
+        const index3 = htmlDocument.indexOf(key3, index2);
 
-   function get52WeekPricePercent(price, _52WeekLow, _52WeekHigh)
-   {
-      const myPrice = (price ? price.number : undefined);
-      const low = (_52WeekLow ? _52WeekLow.number : undefined);
-      const high = (_52WeekHigh ? _52WeekHigh.number : undefined);
-      let answer;
-
-      if (myPrice !== undefined && low !== undefined && high !== undefined)
-      {
-         LOGGER.trace("myPrice = " + myPrice);
-         LOGGER.trace("low = " + low);
-         LOGGER.trace("high = " + high);
-
-         const range = high - low;
-         LOGGER.trace("range = " + range);
-
-         answer = Math.round(100.0 * (myPrice - low) / range);
-         LOGGER.debug("pricePercent = " + answer);
+        if (index2 < index3 && index3 < index5) {
+          const index4 = htmlDocument.indexOf(",", index3);
+          const fmt0 = htmlDocument.substring(index3 + key3.length, index4);
+          fmt = fmt0.replace(/}/g, "");
+          // console.log(`${name} fmt = :${fmt}:`);
+        }
       }
+    }
+  }
 
-      return answer;
-   }
+  return { label, value: fmt, number: raw };
+};
 
-   function parseRowData(xmlDocument)
-   {
-      let _52WeekHigh, _52WeekLow, dividendYield, fiftyTwoWeekPricePercent, forwardPE, freeCashFlow, price;
-      const xml_serializer = new XMLSerializer();
-      let myDocument = xml_serializer.serializeToString(xmlDocument);
+const parse52WeekHigh = htmlDocument => {
+  const index0 = htmlDocument.indexOf("52 Week High");
+  const index2 = htmlDocument.indexOf("</td></tr>", index0);
+  const index1 = htmlDocument.lastIndexOf(">", index2);
+  const rawString0 = htmlDocument.substring(index1 + 1, index2);
+  const rawString = rawString0.replace(/,/g, "");
+  // console.log(`52 week high raw string = :${rawString}:`);
+  const raw = parseFloat(rawString, 10);
+  // console.log(`52 week high raw = ${raw}`);
 
-      const key1 = "root.App.main = ";
-      const index1 = myDocument.indexOf(key1);
+  return { label: "_52WeekHigh", value: raw, number: raw };
+};
 
-      if (index1 >= 0)
-      {
-         const index2 = myDocument.indexOf("\n", index1);
-         myDocument = myDocument.substring(index1 + key1.length, index2);
-         const data1 = JSON.parse(myDocument);
-         const summaryDetail = data1.context.dispatcher.stores.QuoteSummaryStore.summaryDetail;
-         const financialData = data1.context.dispatcher.stores.QuoteSummaryStore.financialData;
-         const labels = ["price", "forwardPE", "_52WeekLow", "_52WeekHigh"];
-         const keys = ["currentPrice", "forwardPE", "fiftyTwoWeekLow", "fiftyTwoWeekHigh"];
+const parse52WeekLow = htmlDocument => {
+  const index0 = htmlDocument.indexOf("52 Week Low");
+  const index2 = htmlDocument.indexOf("</td></tr>", index0);
+  const index1 = htmlDocument.lastIndexOf(">", index2);
+  const rawString0 = htmlDocument.substring(index1 + 1, index2);
+  const rawString = rawString0.replace(/,/g, "");
+  // console.log(`52 week low raw string = :${rawString}:`);
+  const raw = parseFloat(rawString, 10);
+  // console.log(`52 week low raw = ${raw}`);
 
-         labels.forEach(function(label, i)
-         {
-            const key = keys[i];
-            let rawData = summaryDetail[key];
+  return { label: "_52WeekLow", value: raw, number: raw };
+};
 
-            if (rawData === undefined && financialData !== undefined)
-            {
-               rawData = financialData[key];
-            }
+const parseDividendYield = htmlDocument => {
+  const data = parseRawFmt(htmlDocument, '"dividendYield":', "dividendYield");
+  data.number = data.number ? data.number * 100.0 : data.number;
 
-            let newData;
+  return data;
+};
 
-            if (rawData !== undefined)
-            {
-               newData = {
-                  label: label,
-                  value: rawData.fmt,
-                  number: rawData.raw,
-               };
-            }
+const parseFreeCashFlow = htmlDocument => {
+  const data = parseRawFmt(htmlDocument, '"freeCashflow":', "freeCashFlow");
+  data.number = data.number ? data.number / 1.0e9 : data.number;
 
-            switch (label)
-            {
-               case "price":
-                  price = newData;
-                  break;
-               case "_52WeekLow":
-                  _52WeekLow = newData;
-                  break;
-               case "_52WeekHigh":
-                  _52WeekHigh = newData;
-                  break;
-               case "forwardPE":
-                  forwardPE = newData;
-                  break;
-            }
-         });
+  return data;
+};
 
-         if (summaryDetail !== undefined && summaryDetail.dividendYield !== undefined)
-         {
-            dividendYield = {
-               label: "dividendYield",
-               value: summaryDetail.dividendYield.fmt,
-               number: summaryDetail.dividendYield.raw * 100.0,
-            };
-         }
+const parseRowData = (symbol, htmlDocument) => {
+  const price = parseRawFmt(htmlDocument, '"currentPrice":', "price");
+  const _52WeekLow = parse52WeekLow(htmlDocument);
+  const _52WeekHigh = parse52WeekHigh(htmlDocument);
+  const freeCashFlow = parseFreeCashFlow(htmlDocument);
+  const forwardPE = parseRawFmt(htmlDocument, '"forwardPE":', "forwardPE");
+  const dividendYield = parseDividendYield(htmlDocument);
 
-         if (financialData !== undefined && financialData.freeCashflow !== undefined)
-         {
-            freeCashFlow = {
-               label: "freeCashFlow",
-               value: financialData.freeCashflow.fmt,
-               number: financialData.freeCashflow.raw * 1.0e-09,
-            };
-         }
+  const fiftyTwoWeekPricePercent = get52WeekPricePercent(price, _52WeekLow, _52WeekHigh);
 
-         fiftyTwoWeekPricePercent = get52WeekPricePercent(price, _52WeekLow, _52WeekHigh);
-         LOGGER.trace("fiftyTwoWeekPricePercent = " + fiftyTwoWeekPricePercent);
-      }
+  return {
+    symbol,
+    fiftyTwoWeekPricePercent,
+    freeCashFlow: freeCashFlow ? freeCashFlow.number : undefined,
+    forwardPE: forwardPE ? forwardPE.number : undefined,
+    forwardAnnualDividendYield:
+      dividendYield && dividendYield.number ? dividendYield.number : undefined
+  };
+};
 
-      return (
-      {
-         symbol: symbol,
-         fiftyTwoWeekPricePercent: fiftyTwoWeekPricePercent,
-         freeCashFlow: (freeCashFlow ? freeCashFlow.number : undefined),
-         forwardPE: (forwardPE ? forwardPE.number : undefined),
-         forwardAnnualDividendYield: (dividendYield && dividendYield.number ? dividendYield.number : undefined),
-      });
-   }
-}
+const receiveData = symbol => htmlDocument => {
+  // console.log(`receiveData() start ${symbol}`);
+  // console.log(`htmlDocument = ${htmlDocument}`);
+
+  const data = parseRowData(symbol, htmlDocument);
+  // console.log(`receiveData() end ${symbol}`);
+
+  return data;
+};
+
+KeyStatistics.fetchData = symbol => {
+  // console.log(`fetchData() start ${symbol}`);
+
+  const url = createUrl(symbol);
+
+  return FetchUtilities.fetchRetry(url, {}, 3)
+    .then(response => response.text())
+    .then(receiveData(symbol));
+};
 
 export default KeyStatistics;
