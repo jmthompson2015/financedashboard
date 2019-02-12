@@ -114,8 +114,9 @@ KeyStatistics.fetchData = symbol => {
   // console.log(`fetchData() start ${symbol}`);
 
   const url = createUrl(symbol);
+  const options = { mode: "cors" };
 
-  return FetchUtilities.fetchRetry(url, {}, 3)
+  return FetchUtilities.fetchRetry(url, options, 3)
     .then(response => response.text())
     .then(receiveData(symbol));
 };
