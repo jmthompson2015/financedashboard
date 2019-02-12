@@ -28,27 +28,12 @@ const parseRawFmt = (htmlDocument, name, label) => {
     const index5 = htmlDocument.indexOf("},", index0);
 
     if (index5 > index0) {
-      const key1 = '"raw":';
-      const index1 = htmlDocument.indexOf(key1, index0);
-
-      if (index0 < index1 && index1 < index5) {
-        const index2 = htmlDocument.indexOf(",", index1);
-        const rawString0 = htmlDocument.substring(index1 + key1.length, index2);
-        const rawString = rawString0.replace(/,/g, "");
-        // console.log(`${name} raw string = :${rawString}:`);
-        raw = parseFloat(rawString, 10);
-        // console.log(`${name} raw = ${raw}`);
-
-        const key3 = '"fmt":';
-        const index3 = htmlDocument.indexOf(key3, index2);
-
-        if (index2 < index3 && index3 < index5) {
-          const index4 = htmlDocument.indexOf(",", index3);
-          const fmt0 = htmlDocument.substring(index3 + key3.length, index4);
-          fmt = fmt0.replace(/}/g, "");
-          // console.log(`${name} fmt = :${fmt}:`);
-        }
-      }
+      const string = htmlDocument.substring(index0 + name.length, index5 + 1);
+      // console.log(`${name} string = :${string}:`);
+      const data = JSON.parse(string);
+      // console.log(`${name} parsed data = ${JSON.stringify(data)}`);
+      raw = data.raw;
+      fmt = data.fmt;
     }
   }
 
